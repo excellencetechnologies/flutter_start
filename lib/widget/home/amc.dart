@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:myapp/model/user.dart';
-// class MyButton extends StatefulWidget {
-//   String jsonString =
-//       "{\"name\": \"John Smith\",\"email\": \"john@example.com\"}";
+import 'package:myapp/model/post.dart';
+import 'package:myapp/services/post.dart';
 
-//   void _parseJSON() {
-//     setState() {}
-//   }
+class MyDynamicData extends StatefulWidget {
+  @override
+  State<MyDynamicData> createState() {
+    return MyDynamicDataState();
+  }
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return FlatButton(
-//       child: Text("Test JSON"),
-//       onPressed: () {
-//         _parseJSON();
-//       },
-//     );
-//   }
-// }
+class MyDynamicDataState extends State<MyDynamicData> {
+  String textToDisplay = "";
+  bool showLoader = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        showLoader ? CircularProgressIndicator() : Container(),
+        Text("$textToDisplay "),
+        FlatButton(
+          child: Text("Test JSON"),
+          onPressed: () async {
+            setState(() {
+              showLoader = true;
+              textToDisplay = "";
+            });
+            Post post = await PostService.fetchPost();
+            print(post.id);
+            setState(() {
+              showLoader = false;
+              textToDisplay = post.title;
+            });
+          },
+        )
+      ],
+    );
+  }
+}
 
 class AMCSummary extends StatelessWidget {
   @override
@@ -41,18 +60,7 @@ class AMCSummary extends StatelessWidget {
                 Text("21 AMC's in DB"),
                 Text("15 AMC's in DB"),
                 Text("17th July, last amc cron pass"),
-                FlatButton(
-                  child: Text("Test JSON"),
-                  onPressed: () {
-                    String jsonString =
-                        "{\"name\": \"John Smith\",\"email\": \"john@example.com\"}";
-
-                    User user = User.fromJson(jsonDecode(jsonString));
-
-                    print('Howdy, ${user.name}!');
-                    print('We sent the verification link to ${user.email}.');
-                  },
-                )
+                MyDynamicData()
               ],
             ),
           ),
