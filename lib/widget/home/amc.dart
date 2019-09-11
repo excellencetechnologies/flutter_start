@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/post.dart';
 import 'package:myapp/model/amc.dart';
+import 'package:myapp/screens/amc.dart';
 import 'package:myapp/services/post.dart';
 import 'package:myapp/services/amc.dart';
 
@@ -55,7 +56,9 @@ class AMCList extends StatelessWidget {
               return ListTile(
                 onTap: () {
                   print("tapped");
-                  Navigator.pushNamed(context, '/amc');
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => AMCScreen(amc: amcs[index],)
+                  ));
                 },
                 title: Text('${amcs[index].name}'),
               );
