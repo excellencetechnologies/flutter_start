@@ -53,6 +53,10 @@ class AMCList extends StatelessWidget {
             itemCount: amcs.length,
             itemBuilder: (context, index) {
               return ListTile(
+                onTap: () {
+                  print("tapped");
+                  Navigator.pushNamed(context, '/amc');
+                },
                 title: Text('${amcs[index].name}'),
               );
             });
@@ -82,15 +86,11 @@ class AMCSummary extends StatelessWidget {
                 Text("21 AMC's in DB"),
                 Text("15 AMC's in DB"),
                 Text("17th July, last amc cron pass"),
-                MyDynamicData()
               ],
             ),
           ),
           Flexible(
-            child: Icon(
-              Icons.info,
-              color: Theme.of(context).primaryColorLight,
-            ),
+            child: MyDynamicData(),
           )
         ],
       ),
