@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/post.dart';
+import 'package:myapp/model/amc.dart';
 import 'package:myapp/services/post.dart';
+import 'package:myapp/services/amc.dart';
 
 class MyDynamicData extends StatefulWidget {
   @override
@@ -39,6 +41,26 @@ class MyDynamicDataState extends State<MyDynamicData> {
   }
 }
 
+class AMCList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new FutureBuilder<List<AMC>>(
+      future: AMCService.getAMCList(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        List<AMC> amcs = snapshot.data;
+        return ListView.builder(
+            itemCount: amcs.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text('${amcs[index].name}'),
+              );
+            });
+      },
+    );
+  }
+}
+
 class AMCSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -72,6 +94,24 @@ class AMCSummary extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class AMCWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        AMCSummary(),
+        Text(
+          "AMC List",
+          style: Theme.of(context).textTheme.title,
+        ),
+        Expanded(
+          child: AMCList(),
+        )
+      ],
     );
   }
 }

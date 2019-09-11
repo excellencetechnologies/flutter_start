@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: AMCSummary(),
+      body: AMCWidget(),
       drawer: AppDrawer(),
     );
   }
