@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/services/post.dart';
 import 'package:myapp/widget/drawer.dart';
 import 'package:myapp/model/amc.dart';
 import 'package:myapp/model/fund.dart';
@@ -19,10 +20,121 @@ class AMCScreen extends StatelessWidget {
         ),
         title: Text(amc.name),
       ),
-      body: AMCFetchFund(
-        amc: amc,
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            child: FundFilterType(),
+          ),
+          Expanded(
+            child: AMCFetchFund(
+              amc: amc,
+            ),
+          )
+        ],
       ),
       drawer: AppDrawer(),
+    );
+  }
+}
+
+class FundFilterType extends StatefulWidget {
+  @override
+  _FundFilterTypeState createState() => new _FundFilterTypeState();
+}
+
+class _FundFilterTypeState extends State<FundFilterType> {
+  String categoryFilter;
+  String subFilter;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Flexible(
+            child: FutureBuilder(
+              future: AMCService.getFundCategoryFilter(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                if (snapshot.hasData) {
+                  return DropdownButton<String>(
+                    value: categoryFilter,
+                    icon: Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        categoryFilter = newValue;
+                      });
+                    },
+                    items: snapshot.data
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            )),
+        Flexible(
+          child: categoryFilter != null
+              ? FutureBuilder(
+                  future: AMCService.getFundSubCategoryFilter(categoryFilter),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<String>> snapshot) {
+                    if (snapshot.hasData) {
+                      return DropdownButton<String>(
+                        value: subFilter,
+                        icon: Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            subFilter = newValue;
+                          });
+                        },
+                        items: snapshot.data
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                )
+              : Container(),
+        ),
+        Flexible(
+          child: FlatButton(
+            child: Text("Reset"),
+            onPressed: () {
+              setState(() {
+                categoryFilter = null;
+                subFilter = null;
+              });
+            },
+          ),
+        )
+      ],
     );
   }
 }
@@ -54,15 +166,5 @@ class _AMCFetchFundState extends State<AMCFetchFund> {
         }
       },
     );
-  }
-}
-
-class FundData extends StatelessWidget {
-  final Fund fund;
-  FundData({Key key, @required this.fund}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

@@ -31,4 +31,32 @@ class AMCService {
       throw Exception('Failed to load post');
     }
   }
+
+  static Future<List<String>> getFundCategoryFilter() async {
+    final response = await http
+        .get("http://176.9.137.77:8342/api/funds/category?format=json");
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      List filters = json.decode(response.body);
+      return filters.map((ele) => ele.toString()).toList();
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
+
+  static Future<List<String>> getFundSubCategoryFilter(String category) async {
+    final response = await http.get(
+        "http://176.9.137.77:8342/api/funds/subcategory/$category?format=json");
+
+    if (response.statusCode == 200) {
+      // If server returns an OK response, parse the JSON.
+      List filters = json.decode(response.body);
+      return filters.map((ele) => ele.toString()).toList();
+    } else {
+      // If that response was not OK, throw an error.
+      throw Exception('Failed to load post');
+    }
+  }
 }
