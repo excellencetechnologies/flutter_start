@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/services/post.dart';
 import 'package:myapp/widget/drawer.dart';
 import 'package:myapp/model/amc.dart';
 import 'package:myapp/model/fund.dart';
 import 'package:myapp/services/amc.dart';
+
 
 class AMCScreen extends StatelessWidget {
   final String routeName = "/amcScreen";
@@ -54,38 +54,38 @@ class _FundFilterTypeState extends State<FundFilterType> {
       children: <Widget>[
         Flexible(
             child: FutureBuilder(
-              future: AMCService.getFundCategoryFilter(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-                if (snapshot.hasData) {
-                  return DropdownButton<String>(
-                    value: categoryFilter,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        categoryFilter = newValue;
-                      });
-                    },
-                    items: snapshot.data
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+          future: AMCService.getFundCategoryFilter(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            if (snapshot.hasData) {
+              return DropdownButton<String>(
+                value: categoryFilter,
+                icon: Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    categoryFilter = newValue;
+                  });
+                },
+                items:
+                    snapshot.data.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
                   );
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            )),
+                }).toList(),
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        )),
         Flexible(
           child: categoryFilter != null
               ? FutureBuilder(

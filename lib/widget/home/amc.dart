@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:myapp/main.dart';
 import 'package:myapp/model/post.dart';
 import 'package:myapp/model/amc.dart';
 import 'package:myapp/screens/amc.dart';
@@ -56,9 +58,12 @@ class AMCList extends StatelessWidget {
               return ListTile(
                 onTap: () {
                   print("tapped");
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AMCScreen(amc: amcs[index],)
-                  ));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AMCScreen(
+                                amc: amcs[index],
+                              )));
                 },
                 title: Text('${amcs[index].name}'),
               );
@@ -100,6 +105,7 @@ class AMCSummary extends StatelessWidget {
     );
   }
 }
+
 
 class AMCWidget extends StatelessWidget {
   @override
