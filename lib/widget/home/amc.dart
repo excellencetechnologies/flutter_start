@@ -1,77 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:myapp/main.dart';
-import 'package:myapp/model/post.dart';
 import 'package:myapp/model/amc.dart';
-import 'package:myapp/screens/amc.dart';
-import 'package:myapp/services/post.dart';
-import 'package:myapp/services/amc.dart';
+import 'package:myapp/widget/amc_list.dart';
 
-class MyDynamicData extends StatefulWidget {
-  @override
-  State<MyDynamicData> createState() {
-    return MyDynamicDataState();
-  }
-}
-
-class MyDynamicDataState extends State<MyDynamicData> {
-  String textToDisplay = "";
-  bool showLoader = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        showLoader ? CircularProgressIndicator() : Container(),
-        Text("$textToDisplay "),
-        FlatButton(
-          child: Text("Test JSON"),
-          onPressed: () async {
-            setState(() {
-              showLoader = true;
-              textToDisplay = "";
-            });
-            Post post = await PostService.fetchPost();
-            print(post.id);
-            setState(() {
-              showLoader = false;
-              textToDisplay = post.title;
-            });
-          },
-        )
-      ],
-    );
-  }
-}
-
-class AMCList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new FutureBuilder<List<AMC>>(
-      future: AMCService.getAMCList(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
-        List<AMC> amcs = snapshot.data;
-        return ListView.builder(
-            itemCount: amcs.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  print("tapped");
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AMCScreen(
-                                amc: amcs[index],
-                              )));
-                },
-                title: Text('${amcs[index].name}'),
-              );
-            });
-      },
-    );
-  }
-}
 
 class AMCSummary extends StatelessWidget {
   @override
@@ -96,9 +26,6 @@ class AMCSummary extends StatelessWidget {
                 Text("17th July, last amc cron pass"),
               ],
             ),
-          ),
-          Flexible(
-            child: MyDynamicData(),
           )
         ],
       ),
@@ -106,8 +33,9 @@ class AMCSummary extends StatelessWidget {
   }
 }
 
-
 class AMCWidget extends StatelessWidget {
+  final List<AMC> amcList;
+  AMCWidget(this.amcList);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -118,7 +46,7 @@ class AMCWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.title,
         ),
         Expanded(
-          child: AMCList(),
+          child: AMCListWidget(this.amcList),
         )
       ],
     );

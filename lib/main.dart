@@ -1,71 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:myapp/redux/middleware/fetch_amc_list.dart';
+import 'package:myapp/screens/home.dart';
 import 'package:redux/redux.dart';
+import 'package:myapp/redux/reducer.dart';
+import 'package:myapp/redux/app_state.dart';
+import 'package:redux_logging/redux_logging.dart';
 
-//this is a single class or can be a string. mainly just to identify action
-class IncrementAction {
-  IncrementAction();
-}
-
-// this is a reduce which changes the state depending on action
-int reducer(int state, dynamic action) {
-  if (action is IncrementAction) {
-    state = state + 1;
-  }
-  return state;
-}
-
-int appState = 0;
+//this is a single class or can b
 
 void main() {
-  final store = new Store<int>(reducer, initialState: appState);
+  final store = new Store<AppState>(appStateReducer,
+      initialState: AppState.empty,
+      middleware: [
+        new LoggingMiddleware.printer(),
+        new FetchAMCListMiddleware()
+      ]);
   runApp(MainApp(store));
 }
 
 class MainApp extends StatelessWidget {
-  final Store<int> store;
+  final Store<AppState> store;
   MainApp(this.store);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<int>(
+    return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
-          title: 'My First Flutter Redux App',
-          theme: ThemeData.light(),
-          home: Scaffold(
-              appBar: AppBar(
-                title: Text('Redux Counter'),
-              ),
-              body: Center(
-                child: TestDisplayWidget(),
-              ),
-              floatingActionButton: TestActionWidget()
-        )
-      )
-    );
+            title: 'My First Flutter Redux App',
+            theme: ThemeData.light(),
+            home: HomeScreen()));
   }
 }
-
-class TestDisplayWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new StoreConnector<int, String>(
-        converter: (store) => store.state.toString(),
-        builder: (context, counter) {
-          return Text("Counter value $counter");
-        });
-  }
-}
-
-class TestActionWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new StoreConnector<int, VoidCallback>(converter: (store) {
-      return () => store.dispatch(IncrementAction());
-    }, builder: (context, callback) {
-      return FloatingActionButton(child: Icon(Icons.plus_one), onPressed: callback);
-    });
-  }
-}
-
