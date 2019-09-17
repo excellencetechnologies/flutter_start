@@ -13,11 +13,10 @@ class AMCListWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             onTap: () {
-              print("tapped");
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AMCScreen(
+                      builder: (context) => AMCDetailScreen(
                             amc: amcList[index],
                           )));
             },

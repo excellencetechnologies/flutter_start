@@ -1,15 +1,6 @@
-import 'package:myapp/model/amc.dart';
 import 'package:myapp/redux/actions.dart';
 import 'package:myapp/redux/app_state.dart';
-import 'package:redux/redux.dart';
-
-List<AMC> fetchAMCSuccess(List<AMC> state, FetchAMCListSucess action) {
-  return new List.from(action.amcs);
-}
-
-//https://github.com/johnpryan/redux.dart/blob/master/doc/combine_reducers.md
-final Reducer<List<AMC>> amcItemsReducer = combineReducers<List<AMC>>(
-    [new TypedReducer<List<AMC>, FetchAMCListSucess>(fetchAMCSuccess)]);
+import 'package:myapp/redux/reducer/amc_view_state.dart';
 
 bool globalLoadingReducer(bool state, action) {
   if (action is GlobalLoading) {
@@ -20,7 +11,7 @@ bool globalLoadingReducer(bool state, action) {
 
 AppState appStateReducer(AppState state, dynamic action) {
   return AppState(
-      amcList: amcItemsReducer(state.amcList, action),
-      isGlobalAPILoading:
-          globalLoadingReducer(state.isGlobalAPILoading, action));
+    amcViewState: amcViewReducer(state.amcViewState, action),
+    isGlobalAPILoading: globalLoadingReducer(state.isGlobalAPILoading, action),
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/amc_list.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -15,10 +16,9 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('Menu Item 1'),
+            title: Text('AMC List'),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.pushNamed(context, AMCListScreen.routeName);
             },
           ),
           ListTile(

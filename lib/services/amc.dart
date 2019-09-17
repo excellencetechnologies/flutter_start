@@ -18,9 +18,19 @@ class AMCService {
     }
   }
 
-  static Future<List<Fund>> getFunds(AMC amc) async {
-    final response = await http.get(
-        "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/?format=json");
+  static Future<List<Fund>> getFunds(AMC amc,
+      {String category = "", String subCategory = ""}) async {
+    var response;
+    if (category.length > 0 && subCategory.length > 0) {
+      response = await http.get(
+          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/$category/$subCategory/?format=json");
+    } else if (category.length > 0) {
+      response = await http.get(
+          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/$category/?format=json");
+    } else {
+      response = await http.get(
+          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/?format=json");
+    }
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.

@@ -20,4 +20,9 @@ class Fund {
         fundName = json["fund_name"],
         fundOption = json["fund_option"],
         fundType = json["fund_type"];
+
+  @override
+  String toString() {
+    return "FUND: $name";
+  }
 }

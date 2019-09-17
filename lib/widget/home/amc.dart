@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/model/amc.dart';
-import 'package:myapp/widget/amc_list.dart';
-
 
 class AMCSummary extends StatelessWidget {
   @override
@@ -34,20 +31,11 @@ class AMCSummary extends StatelessWidget {
 }
 
 class AMCWidget extends StatelessWidget {
-  final List<AMC> amcList;
-  AMCWidget(this.amcList);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        AMCSummary(),
-        Text(
-          "AMC List",
-          style: Theme.of(context).textTheme.title,
-        ),
-        Expanded(
-          child: AMCListWidget(this.amcList),
-        )
+        AMCSummary()
       ],
     );
   }
