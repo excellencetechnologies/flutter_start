@@ -3,10 +3,13 @@ import 'package:myapp/model/fund.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:myapp/services/index.dart';
+
 class AMCService {
+
   static Future<List<AMC>> getAMCList() async {
     final response =
-        await http.get('http://176.9.137.77:8342/api/amc/?format=json');
+        await http.get('$API_URL/api/amc/?format=json');
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -23,13 +26,13 @@ class AMCService {
     var response;
     if (category.length > 0 && subCategory.length > 0) {
       response = await http.get(
-          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/$category/$subCategory/?format=json");
+          "$API_URL/api/funds/scheme/${amc.id}/$category/$subCategory/?format=json");
     } else if (category.length > 0) {
       response = await http.get(
-          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/$category/?format=json");
+          "$API_URL/api/funds/scheme/${amc.id}/$category/?format=json");
     } else {
       response = await http.get(
-          "http://176.9.137.77:8342/api/funds/scheme/${amc.id}/?format=json");
+          "$API_URL/api/funds/scheme/${amc.id}/?format=json");
     }
 
     if (response.statusCode == 200) {
@@ -44,7 +47,7 @@ class AMCService {
 
   static Future<List<String>> getFundCategoryFilter() async {
     final response = await http
-        .get("http://176.9.137.77:8342/api/funds/category?format=json");
+        .get("$API_URL/api/funds/category?format=json");
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
@@ -58,7 +61,7 @@ class AMCService {
 
   static Future<List<String>> getFundSubCategoryFilter(String category) async {
     final response = await http.get(
-        "http://176.9.137.77:8342/api/funds/subcategory/$category?format=json");
+        "$API_URL/api/funds/subcategory/$category?format=json");
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.

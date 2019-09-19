@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:myapp/redux/middleware/fetch_amc_list.dart';
-import 'package:myapp/screens/amc.dart';
 import 'package:myapp/screens/amc_list.dart';
 import 'package:myapp/screens/home.dart';
 import 'package:redux/redux.dart';
